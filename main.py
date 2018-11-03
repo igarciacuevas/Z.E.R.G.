@@ -9,3 +9,9 @@ import math
 from Inicializar import *
 
 
+#Lectura de datos
+Citys=leerdatos("berlin52.txt")
+#Calculo de distancias
+Distancias=CalcularDistancias(Citys["Lat"],Citys["Long"])
+
+
