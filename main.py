@@ -23,7 +23,6 @@ Distancias = calculardistancias(Citys["Lat"],Citys["Long"])
 # Variables iniciales y auxiliares
 tamaño=500
 numvecinos=4
-itermax=600
 enjambre = []
 distanciasrutas = []
 indices = list(range(tamaño - 1))
@@ -35,9 +34,23 @@ for i in range(len(tamaño)):
   distanciasrutas.append(particula.distanciaruta) # Guardamos la distancia de la ruta de cada particula
   enjambre.append(particula) # Añadimos la particula al enjambre
 
-# Sacamos la particula con menor distancia de ruta
+# Sacamos el indice la particula con menor distancia de ruta
 indicemejorparticula = numpy.argmin(distanciasrutas)
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#             EVOLUCION DEL ENJAMBRE
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+itermax=600
+operador_cross=1 #Seleccionar el operador de crossover
+operador_mut=1 #Seleccionar el operador de mutacion
+
+# Empezamos el bucle de evolucion que nos dara la solucion al finalizar
+for i in range(itermax):
+    nuevagen = [] # Lista vacia donde guardar las nuevas particulas
+    for particula in enjambre:
+        nuevaparticula = gennuevaparticula(enjambre,particula,operador_cross,operador_mut)
+    
 
 
 
