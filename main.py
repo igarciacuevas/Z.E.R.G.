@@ -8,14 +8,14 @@ Created on Sat Nov  3 21:12:33 2018
 import math
 import numpy
 import random
-from Inicializar import *
+from FuncionesInicializar import leerdatos, calculardistancias
 import GenParticula
 
 
 #Lectura de datos
-Citys=leerdatos("berlin52.txt")
+Citys = leerdatos("berlin52.txt")
 #Calculo de distancias
-Distancias=CalcularDistancias(Citys["Lat"],Citys["Long"])
+Distancias = calculardistancias(Citys["Lat"],Citys["Long"])
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             CREACION DEL ENJAMBRE
