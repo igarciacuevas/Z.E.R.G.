@@ -30,7 +30,7 @@ class GenParticula:
     
 # Llamada a esta clase
 # Generamos ruta aleatoria para la primera vez
-def random_particle(vecinos, distancias):
+def crear_particula(vecinos, distancias):
     # Generamos la lista de indices de las ciudades
     ruta = list(range(len(distancias)))
     # Reordenamos la lista aleatoriamente
