@@ -11,7 +11,7 @@ class GenParticula:
     
     def __init__(self, ruta, distancias, vecinos):
         self.ruta = ruta # Orden de ciudades de la ruta
-        self.vecinos = vecinos # Numero de vecinos con los que realizar crossover
+        self.vecinos = vecinos # Indices de los vecinos con los que realizar crossover
         self.__distancias = distancias # Distancias entre ciudades
         self.distanciaruta = 0.0 # Distancia de la ruta creada
         self.__calculardistanciaruta() # Calculo de la distancia de la ruta creada
