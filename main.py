@@ -5,16 +5,16 @@ Created on Sat Nov  3 21:12:33 2018
 @author: igarc
 """
 
-import math
 import numpy
 import random
 from FuncionesInicializar import leerdatos, calculardistancias
 import GenParticula
+import Evolucion
 
 #Lectura de datos
-Citys = leerdatos("berlin52.txt")
+Citys=leerdatos("berlin52.txt")
 #Calculo de distancias
-Distancias = calculardistancias(Citys["Lat"],Citys["Long"])
+Distancias=calculardistancias(Citys["Lat"],Citys["Long"])
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             CREACION DEL ENJAMBRE
@@ -33,7 +33,7 @@ for i in range(len(tamaño)):
   distanciasrutas.append(particula.distanciaruta) # Guardamos la distancia de la ruta de cada particula
   enjambre.append(particula) # Añadimos la particula al enjambre
 
-# Sacamos el indice la particula con menor distancia de ruta
+# Sacamos el indice del enjambre correspondiente a la particula con menor distancia de ruta
 indicemejorparticula = numpy.argmin(distanciasrutas)
 
 
@@ -50,6 +50,3 @@ for i in range(itermax):
     for particula in enjambre:
         nuevaparticula = gennuevaparticula(enjambre,particula,operador_cross,operador_mut)
     
-
-
-
