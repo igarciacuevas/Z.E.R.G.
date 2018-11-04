@@ -10,10 +10,7 @@ import numpy
 import random
 from FuncionesInicializar import leerdatos, calculardistancias
 import GenParticula
-import sys
 
-# Añadimos el directorio data a PATH para el acceso de los archivos
-sys.path.append("./data")
 #Lectura de datos
 Citys = leerdatos("berlin52.txt")
 #Calculo de distancias
