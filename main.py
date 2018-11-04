@@ -6,6 +6,7 @@ Created on Sat Nov  3 21:12:33 2018
 """
 
 import math
+import numpy
 import random
 from Inicializar import *
 import GenParticula
@@ -17,18 +18,26 @@ Citys=leerdatos("berlin52.txt")
 Distancias=CalcularDistancias(Citys["Lat"],Citys["Long"])
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#                   ENJAMBRE
+#             CREACION DEL ENJAMBRE
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Variables iniciales y auxiliares
 tamaño=500
 numvecinos=4
 itermax=600
 enjambre = []
+distanciasrutas = []
 indices = list(range(tamaño - 1))
 
 # Vamos a generar todas las particulas iniciales
 for i in range(len(tamaño)):
   indicesvecinos = random.sample(indices, numvecinos) # Vecinos para cada particula con los que realizará crossovers
-  particula = GenParticula(
+  particula = GenParticula.crear_particula(indicesvecinos,Distancias) # Generamos particulas iniciales
+  distanciasrutas.append(particula.distanciaruta) # Guardamos la distancia de la ruta de cada particula
+  enjambre.append(particula) # Añadimos la particula al enjambre
+
+# Sacamos la particula con menor distancia de ruta
+indicemejorparticula = numpy.argmin(distanciasrutas)
+
+
 
 
