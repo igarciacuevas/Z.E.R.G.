@@ -48,5 +48,5 @@ operador_mut=1 #Seleccionar el operador de mutacion
 for i in range(itermax):
     nuevagen = [] # Lista vacia donde guardar las nuevas particulas
     for particula in enjambre:
-        nuevaparticula = gennuevaparticula(enjambre,particula,operador_cross,operador_mut)
+        nuevaparticula = Evolucion.gennuevaparticula(enjambre,particula,operador_cross,operador_mut)
     
