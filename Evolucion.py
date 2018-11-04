@@ -18,6 +18,6 @@ def gennuevaparticula(enjambre,particula,operador_cross,operador_mut):
             mejorvecino = temp_particula
         
     # Una vez seleccionado el mejor vecino, realizamos el crossover
-    nuevaparticula = cruzarymutar(particula,mejorvecino,operador_cross,operador_mut)
+    nuevaparticula = Crossovers.cruzarymutar(particula,mejorvecino,operador_cross,operador_mut)
     
-    
+    return nuevaparticula
