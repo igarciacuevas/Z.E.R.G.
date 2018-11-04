@@ -69,7 +69,7 @@ def LeerLineas(archivo,separador):
     return Ciudades
 
 
-def CalcularDistancias(Latitudes,Longitudes):
+def calculardistancias(Latitudes,Longitudes):
     # Inicializar Listas y puntos auxiliares
     Distancias = []
     Punto1 = []
