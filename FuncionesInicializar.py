@@ -11,33 +11,33 @@ def leerdatos(nombre):
     # Lista de ciudades
     Ciudades = {}
     
-    # provincias españolas
-    if (nombre == "provincias"):
-        archivo = open("Provincias.txt", "r")
+    # Capitales autonomicas
+    if (nombre == "autonomicas"):
+        archivo = open("./data/CapitalesAutonomicas.txt", "r")
         Ciudades = LeerLineas(archivo,"tabulador")
     # capitales del mundo
     elif (nombre == "mundo"):
-        archivo = open("CapitalesMundiales.txt", "r")
+        archivo = open("./data/CapitalesMundiales.txt", "r")
         Ciudades = LeerLineas(archivo,"tabulador")
     # capitales europeas
     elif (nombre == "europa"):
-        archivo = open("CapitalesEuropa.txt", "r")
+        archivo = open("./data/CapitalesEuropa.txt", "r")
         Ciudades = LeerLineas(archivo,"tabulador")
     # capitales asia
     elif (nombre == "asia"):
-        archivo = open("CapitalesAsia.txt", "r")
+        archivo = open("./data/CapitalesAsia.txt", "r")
         Ciudades = LeerLineas(archivo,"tabulador")
     # capitales america
     elif (nombre == "america"):
-        archivo = open("CapitalesAmerica.txt", "r")
+        archivo = open("./data/CapitalesAmerica.txt", "r")
         Ciudades = LeerLineas(archivo,"tabulador")
     # capitales oceania
     elif (nombre == "oceania"):
-        archivo = open("CapitalesOceania.txt", "r")
+        archivo = open("./data/CapitalesOceania.txt", "r")
         Ciudades = LeerLineas(archivo,"tabulador")
     # Benchmark problem data: archivos de texto separado por espacios
     else:
-        archivo = open(nombre, "r")
+        archivo = open("./data/"+nombre, "r")
         Ciudades = LeerLineas(archivo,"espacio")
         
     # Cerrar archivo y devolver diccionario
