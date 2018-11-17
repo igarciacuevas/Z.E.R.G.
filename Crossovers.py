@@ -4,47 +4,23 @@ Created on Sun Nov  4 11:33:02 2018
 
 @author: igarc
 
-Operadores de crossover y mutaciones extraidos de:
+Operadores de crossover extraidos de:
 http://www.rubicite.com/Tutorials/GeneticAlgorithms.aspx
 
-3 de cada operador han sido seleccionados
-3 (crossover) x 3 (mutaciones-2 op + nomut) = 9 configuraciones
+3 doperadores de crossover han sido seleccionados:
+    Order1
+    PMX
+    Cycle
 """
 
 import random
-import GenParticula
 
-def cruzarymutar(particula,vecino,opcross=1,opmut=0):
-    # Por defecto se realizará un crossover Order1 y no mutacion
-    if opcross == 1: # Order1
-        nuevaparticula = Order1(particula,vecino)
-    elif opcross == 2: # Cycle
-        nuevaparticula = Cycle(particula,vecino)
-    elif opcross == 3: # Partially mapped crossover
-        nuevaparticula = PMX(particula,vecino)
-    else: # Si no es numero de operador valido, se realizar un Order1
-        nuevaparticula = Order1(particula,vecino)
-        
-    # Mutaciones. Por defecto no se realizará la operacion de mutacion
-    if opmut == 1: # Inversion
-        nuevaparticula = Inversion(particula,vecino)
-    elif opmut == 2: # SingleSwap
-        nuevaparticula = SingleSwap(particula,vecino)
-    
-    return nuevaparticula
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#           Operadores Crossover
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 Order1 operator
 http://www.rubicite.com/Tutorials/GeneticAlgorithms/CrossoverOperators/Order1CrossoverOperator.aspx
 https://www.youtube.com/watch?v=HATPHZ6P7c4
 """  
-def Order1(particula,vecino):
-    ruta1 = particula.ruta
-    ruta2 = vecino.ruta
-    
+def Order1(ruta1,ruta2):
     # posiciones de intercambio
     posorigen = random.randint(0,len(ruta1)-1)
     posfinal = random.randint(0,len(ruta1)-1)
@@ -53,7 +29,8 @@ def Order1(particula,vecino):
     if posfinal < posorigen: 
         posorigen, posfinal = posfinal, posorigen
     elif posorigen == posfinal:
-        return 
+        # Devolvemos la original
+        return ruta1
         
     # Creamos la ruta
     nuevaruta = [0] * len(ruta1)
@@ -70,36 +47,40 @@ def Order1(particula,vecino):
             # Elementos de la ruta2 ya guardados
             flags[ruta2.index(elemento)] = True
     
+    
+    # Posicion donde empezar a insertar los elementos restantes
     pos_insert = posfinal+1
+    
+    # Overflow
+    if pos_insert >= len(nuevaruta):
+            pos_insert = 0
+    
     # ahora insertamos desde la derecha del cacho los elementos de ruta 2,
     # que aun no han sido insertados
     for i in range(posfinal+1,len(ruta2)):
-        print(nuevaruta)
         # Si el elemento no esta incluido
         if not flags[i]:
             nuevaruta[pos_insert] = ruta2[i]
             pos_insert+=1
             flags[i] = True
-            
+        
+        # Overflow
         if pos_insert >= len(nuevaruta):
             pos_insert = 0
         
     # Metemos el resto de elementos
     for i in range(posfinal+1):
-        print(nuevaruta)
         # Si el elemento no esta incluido
         if not flags[i]:
             nuevaruta[pos_insert] = ruta2[i]
             pos_insert+=1
             flags[i] = True
         
+        # Overflow
         if pos_insert >= len(nuevaruta):
             pos_insert = 0
     
-    # Generamos nueva particula
-    nuevaparticula = GenParticula.GenParticula(nuevaruta,particula.distancias,particula.vecinos)
-    
-    return nuevaparticula
+    return nuevaruta
 
 """
 Cycle operator
@@ -107,10 +88,7 @@ http://www.rubicite.com/Tutorials/GeneticAlgorithms/CrossoverOperators/CycleCros
 https://www.youtube.com/watch?v=DJ-yBmEEkgA
 Esta operacion puede devolver 2 partículas descendientes pero solo elegiremos una
 """
-def Cycle(particula,vecino):
-    ruta1 = particula.ruta
-    ruta2 = vecino.ruta
-    
+def Cycle(ruta1,ruta2):
     # Generamos variables iniciales
     flags = [False] * len(ruta1)
     nuevaruta = [0] * len(ruta1)
@@ -158,19 +136,14 @@ def Cycle(particula,vecino):
                 origen = indice
                 switch = not switch #Alternamos
         
-    nuevaparticula = GenParticula.GenParticula(nuevaruta,particula.distancias,particula.vecinos)
-    
-    return nuevaparticula
+    return nuevaruta
  
 """
 Partially mapped crossover
 http://www.rubicite.com/Tutorials/GeneticAlgorithms/CrossoverOperators/PMXCrossoverOperator.aspx
 https://www.youtube.com/watch?v=ZtaHg1C25Kk
 """
-def PMX(particula,vecino):
-    ruta1 = particula.ruta
-    ruta2 = vecino.ruta
-    
+def PMX(ruta1,ruta2):
     # Posiciones de la insercion original
     posorigen = random.randint(0,len(ruta1)-1)
     posfinal = random.randint(0,len(ruta1)-1)
@@ -179,7 +152,8 @@ def PMX(particula,vecino):
     if posfinal < posorigen: 
         posorigen, posfinal = posfinal, posorigen
     elif posorigen == posfinal:
-        return 
+        # Devolvemos la original
+        return ruta1
     
     posfinal+=1 #Indices de listas funcionan raro ;-)
     
@@ -226,22 +200,10 @@ def PMX(particula,vecino):
         # Si no esta relleno aún
         if not flags[i]:
             nuevaruta[i] = ruta2[i]
-        
-    nuevaparticula = GenParticula.GenParticula(nuevaruta,particula.distancias,particula.vecinos)
     
-    return nuevaparticula
+    return nuevaruta
     
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#           Operadores Mutacion
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-def Inversion(particula,vecino):
-    
-    return nuevaparticula
 
-def SingleSwap(particula,vecino):
-    
-    return nuevaparticula
     
     
     
