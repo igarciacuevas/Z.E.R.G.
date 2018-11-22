@@ -28,7 +28,7 @@ def gennuevaruta(enjambre,particula,operador_cross,operador_mut):
     return nuevaruta
 
 
-def cruzarymutar(rutaparticula,rutavecino,opcross=1,opmut=0):
+def cruzarymutar(rutaparticula,rutavecino,opcross,opmut):
     # Por defecto se realizará un crossover Order1 y no mutacion
     if opcross == 1: # Order1
         nuevaruta = Crossovers.Order1(rutaparticula,rutavecino)
@@ -43,6 +43,6 @@ def cruzarymutar(rutaparticula,rutavecino,opcross=1,opmut=0):
     if opmut == 1: # Inversion
         nuevaruta = Mutations.Inversion(nuevaruta)
     elif opmut == 2: # SingleSwap
-        nuevaruta = Mutations.SingleSwap(nuevaruta)
+        nuevaruta = Mutations.RandomSwap(nuevaruta)
     
     return nuevaruta
