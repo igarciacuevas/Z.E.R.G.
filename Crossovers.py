@@ -162,8 +162,10 @@ def PMX(ruta1,ruta2):
     flags = [False] * len(nuevaruta)
     cacho1 = ruta1[posorigen:posfinal]
     nuevaruta[posorigen:posfinal] = cacho1
+    
     # Posiciones que ya estan llenas
-    flags[posorigen:posfinal] = True
+    for i in range(posorigen,posfinal):
+        flags[i] = True
     
     # Del mismo tramo de la ruta 2, vemos que elementos no han sido copiados aun
     flagslocales = [False] * len(cacho1)
