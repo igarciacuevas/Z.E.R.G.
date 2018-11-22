@@ -17,119 +17,180 @@ import Evolucion
 import datetime
 import funcionesLog
 import os
+import time
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             DATOS INICIALES
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-archivodatos = "berlin52.txt"
-#archivodatos = "autonomicas"
-
-# Variables auxiliares
-tamaño=100 # Tamaño del enjambre
-itermax=600 # Numero de iteraciones maximas para la busqueda
-numvecinos=4 # Numero de vecinos para cada particula
-operador_cross=1 # 1=Order1 // 2=Cycle // 3=PMX
-operador_mut=1 # 0=No mutacion // 1=Inversion // 2=SingleSwap
-
-# Variables vacias iniciales
-enjambre = [] # Lista de todas las particulas
-distanciasrutas = [] # Lista de las distancias para cada particula
-indices = list(range(tamaño - 1)) # Indices del 0 al tamaño del enjambre (-1)
-
-# Logfile para la ejecucion
-nombrelogfile = os.path.splitext(archivodatos)[0]+datetime.datetime.now().strftime('_%H_%M_%S_%d_%m_%Y.log')
-logbook = open(nombrelogfile, "a")
-funcionesLog.iniciar(logbook,operador_cross,operador_mut,tamaño,itermax)
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             DATOS DEL PROBLEMA
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#Lectura de datos
-# Citys
-#   "Lat" - Latitud de cada ciudad
-#   "Long" - Longitud de cada ciudad
-#   "Nombres" - Nombres de cada punto. Pueden ser nombres propios o numeros simplemente
-Citys = FuncionesInicializar.leerdatos(archivodatos)
-#Calculo de distancias
-Distancias = FuncionesInicializar.calculardistancias(Citys["Lat"],Citys["Long"])
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             CREACION DEL ENJAMBRE
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Vamos a generar todas las particulas iniciales
-for i in range(tamaño):
-  # Vecinos para cada particula con los que realizará crossovers
-  indicesvecinos = random.sample(indices, numvecinos) 
-  # Generamos particulas iniciales
-  particula = GenParticula.crear_particula(indicesvecinos,Distancias) 
-  # Guardamos la distancia de la ruta de cada particula
-  distanciasrutas.append(particula.distanciaruta) 
-  # Añadimos la particula al enjambre
-  enjambre.append(particula) 
-
-# Sacamos el indice del enjambre correspondiente a la particula 
-# con menor distancia de ruta del enjambre inicial
-indicemejorparticula_ini = numpy.argmin(distanciasrutas)
-logbook.write("Mejor distancia inicial: " + str(enjambre[indicemejorparticula_ini].distanciaruta))
-logbook.write("\n")
-logbook.write("\n")
-logbook.write("\n")
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             EVOLUCION DEL ENJAMBRE
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Empezamos el bucle de evolucion que nos dara la solucion al finalizar
-for i in range(itermax):
-    print("Iteracion " + str(i))
-    # Iteramos a lo largo del enjambre
-    for j in range(len(indices)):
-        print(j)
-        # Sacamos la particula
-        particulaoriginal = enjambre[j]
-        # Caculamos la nueva ruta resultado de curzar y mutar
-        nuevaruta = Evolucion.gennuevaruta(enjambre,particulaoriginal,operador_cross,operador_mut)
-        # Si la nueva particula es mejor que la original, la reemplazará
-        # En caso contrario la particula original se mantendrá
-        nuevaparticula = GenParticula.GenParticula(nuevaruta, Distancias, particulaoriginal.vecinos)
+def ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut):
+    
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #             DATOS INICIALES
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    # Variables vacias iniciales
+    enjambre = [] # Lista de todas las particulas
+    distanciasrutas = [] # Lista de las distancias para cada particula
+    indices = list(range(tamaño)) # Indices del 0 al tamaño del enjambre 
+    
+    # Logfile para la ejecucion
+    nombrelogfile = os.path.splitext(archivodatos)[0]+datetime.datetime.now().strftime('_%H_%M_%S_%d_%m_%Y.log')
+    
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #             DATOS DEL PROBLEMA
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    #Lectura de datos
+    # Citys
+    #   "Lat" - Latitud de cada ciudad
+    #   "Long" - Longitud de cada ciudad
+    #   "Nombres" - Nombres de cada punto. Pueden ser nombres propios o numeros simplemente
+    Citys = FuncionesInicializar.leerdatos(archivodatos)
+    #Calculo de distancias
+    Distancias = FuncionesInicializar.calculardistancias(Citys["Lat"],Citys["Long"])
+    
+    with open("./logs/"+nombrelogfile, "a") as logbook:
         
-        if nuevaparticula.distanciaruta < particulaoriginal.distanciaruta:
-            enjambre[j] = nuevaparticula
-            distanciasrutas[j] = nuevaparticula.distanciaruta
+        funcionesLog.iniciar(logbook,operador_cross,operador_mut,tamaño,itermax,len(Citys["Lat"]))
+        
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        #             CREACION DEL ENJAMBRE
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        # Vamos a generar todas las particulas iniciales
+        for i in range(tamaño):
+          # Vecinos para cada particula con los que realizará crossovers
+          indicesvecinos = random.sample(indices, numvecinos) 
+          # Generamos particulas iniciales
+          particula = GenParticula.crear_particula(indicesvecinos,Distancias) 
+          # Guardamos la distancia de la ruta de cada particula
+          distanciasrutas.append(particula.distanciaruta) 
+          # Añadimos la particula al enjambre
+          enjambre.append(particula) 
+        
+        # Sacamos el indice del enjambre correspondiente a la particula 
+        # con menor distancia de ruta del enjambre inicial
+        indicemejorparticula_ini = numpy.argmin(distanciasrutas)
+        logbook.write("Mejor distancia inicial: " + str(enjambre[indicemejorparticula_ini].distanciaruta))
+        logbook.write("\n")
+        logbook.write("\n")
+        logbook.write("\n")
+        
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        #             EVOLUCION DEL ENJAMBRE
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        contadorestancamiento = 0
+        idxbestold = -1
+        
+        tiempoini = time.time()
+        
+        # Empezamos el bucle de evolucion que nos dara la solucion al finalizar
+        for i in range(itermax):
+            print("Iteracion " + str(i))
+            # Iteramos a lo largo del enjambre
+            for j in range(len(indices)):
+                print(j)
+                # Sacamos la particula
+                particulaoriginal = enjambre[j]
+                # Caculamos la nueva ruta resultado de curzar y mutar
+                nuevaruta = Evolucion.gennuevaruta(enjambre,particulaoriginal,operador_cross,operador_mut)
+                # Si la nueva particula es mejor que la original, la reemplazará
+                # En caso contrario la particula original se mantendrá
+                nuevaparticula = GenParticula.GenParticula(nuevaruta, Distancias, particulaoriginal.vecinos)
                 
-    # Sacamos la mejor distancia de la iteracion
-    idxbest = numpy.argmin(distanciasrutas)
-    logbook.write(str(i) + "--" + str(enjambre[idxbest].distanciaruta))
-    logbook.write("\n")
+                if nuevaparticula.distanciaruta < particulaoriginal.distanciaruta:
+                    enjambre[j] = nuevaparticula
+                    distanciasrutas[j] = nuevaparticula.distanciaruta
+                        
+            # Sacamos la mejor distancia de la iteracion
+            idxbest = numpy.argmin(distanciasrutas)
+            logbook.write(str(i) + "--" + str(enjambre[idxbest].distanciaruta))
+            logbook.write("\n")
+            
+            # Si recibimos misma ruta optima durante más de el 30% de iteraciones - BREAK
+            if idxbest == idxbestold:
+                contadorestancamiento+=1
+                if contadorestancamiento >= round((0.2*itermax)):
+                    print("Busqueda estancada.")
+                    logbook.write("FINAL DE BUSQUEDA POR ESTANCAMIENTO")
+                    logbook.write("\n")
+                    break
+            else:
+                contadorestancamiento = 0
+                idxbestold = idxbest
+                
+        tiempofin = time.time()
         
-
-resultado = enjambre[idxbest]
-
-# Resultado final
-logbook.write("\n")
-logbook.write("El mejor resultado final es:")
-logbook.write("\n")
-logbook.write("\n")
-logbook.write("Distancia:  " + str(resultado.distanciaruta))
-logbook.write("\n")
-logbook.write("\n")
-logbook.write("La ruta a seguir es:")
-logbook.write("\n")
-contadorbreakline = 0
-for i in range(len(resultado.ruta)-1):
-    logbook.write(Citys["Nombres"][resultado.ruta[i]] + "==>")
-    contadorbreakline+=1
-    # Cada 8 ciudades apuntadas, pasamos a nueva linea
-    if contadorbreakline == 8:
+        # Calculamos el tiempo de ejecucion redondeando a milisegundos
+        tiempocalculo = round(tiempofin - tiempoini,3)
+        logbook.write("\n")
+        logbook.write("El tiempo de búsuqeda ha sido de " + str(tiempocalculo) + " segundos.")
+        logbook.write("\n")
+        logbook.write("\n")
+        
+        resultado = enjambre[idxbest]
+        
+        # Resultado final
+        logbook.write("\n")
+        logbook.write("El mejor resultado final es:")
+        logbook.write("\n")
+        logbook.write("\n")
+        logbook.write("Distancia:  " + str(resultado.distanciaruta))
+        logbook.write("\n")
+        logbook.write("\n")
+        logbook.write("Indices de ruta:  " + str(resultado.ruta))
+        logbook.write("\n")
+        logbook.write("\n")
+        logbook.write("La ruta a seguir es:")
         logbook.write("\n")
         contadorbreakline = 0
-    
-logbook.write(Citys["Nombres"][resultado.ruta[-1]]+"==>"+Citys["Nombres"][resultado.ruta[0]])
-logbook.write("\n")
-logbook.write("\n")
-logbook.write("------FINAL DEL EXPERIMENTO------")
-logbook.close()
-    
+        for i in range(len(resultado.ruta)-1):
+            logbook.write(Citys["Nombres"][resultado.ruta[i]] + "==>")
+            contadorbreakline+=1
+            # Cada 8 ciudades apuntadas, pasamos a nueva linea
+            if contadorbreakline == 8:
+                logbook.write("\n")
+                contadorbreakline = 0
+            
+        logbook.write(Citys["Nombres"][resultado.ruta[-1]]+"==>"+Citys["Nombres"][resultado.ruta[0]])
+        logbook.write("\n")
+        logbook.write("\n")
+        logbook.write("------FINAL DEL EXPERIMENTO------")
+        logbook.close()
+            
+        return
+
+
+# Variables auxiliares
+# Input de datos
+archivos = ["autonomicas", "mundiales","berlin52.txt","ch130.txt","ch150.txt","PoblacionesSpa.txt"]
+#archivodatos = "berlin52.txt" 
+
+# Tamños de enjambres
+tamaños = [20,40,70,100,250,500]
+#tamaño = 100
+
+# Numero maximo de iteraciones
+iteraciones = [50,100,250,500,1000,2000]
+#itermax = 600
+
+# Numero de vecinos entre particulas
+numerodevecinos = [2,3,4,5,7,10] # Numero de vecinos para cada particula
+#numvecinos = 4
+
+# Operadores de crossover
+# 1=Order1 // 2=Cycle // 3=PMX
+operadores_c = [1,2,3]
+#operador_cross = 1 
+
+# Operadores de mutacion
+operadores_m = [0,1,2]
+#operador_mut = 1 # 0=No mutacion // 1=Inversion // 2=RandomSwap
+
+for archivodatos in archivos:
+    for tamaño in tamaños:
+        for itermax in iteraciones:
+            for numvecinos in numerodevecinos:
+                for operador_cross in operadores_c:
+                    for operador_mut in operadores_m:
+                        ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut)
+
