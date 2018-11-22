@@ -20,21 +20,21 @@ def leerdatos(nombre):
         archivo = open("./data/CapitalesMundiales.txt", "r")
         Ciudades = LeerLineas(archivo,"tabulador")
     # capitales europeas
-    elif (nombre == "europa"):
-        archivo = open("./data/CapitalesEuropa.txt", "r")
-        Ciudades = LeerLineas(archivo,"tabulador")
+#    elif (nombre == "europa"):
+#        archivo = open("./data/CapitalesEuropa.txt", "r")
+#        Ciudades = LeerLineas(archivo,"tabulador")
     # capitales asia
-    elif (nombre == "asia"):
-        archivo = open("./data/CapitalesAsia.txt", "r")
-        Ciudades = LeerLineas(archivo,"tabulador")
+#    elif (nombre == "asia"):
+#        archivo = open("./data/CapitalesAsia.txt", "r")
+#        Ciudades = LeerLineas(archivo,"tabulador")
     # capitales america
-    elif (nombre == "america"):
-        archivo = open("./data/CapitalesAmerica.txt", "r")
-        Ciudades = LeerLineas(archivo,"tabulador")
+#    elif (nombre == "america"):
+#        archivo = open("./data/CapitalesAmerica.txt", "r")
+#        Ciudades = LeerLineas(archivo,"tabulador")
     # capitales oceania
-    elif (nombre == "oceania"):
-        archivo = open("./data/CapitalesOceania.txt", "r")
-        Ciudades = LeerLineas(archivo,"tabulador")
+#    elif (nombre == "oceania"):
+#        archivo = open("./data/CapitalesOceania.txt", "r")
+#        Ciudades = LeerLineas(archivo,"tabulador")
     # Benchmark problem data: archivos de texto separado por espacios
     else:
         archivo = open("./data/"+nombre, "r")
@@ -87,7 +87,3 @@ def calculardistancias(Latitudes,Longitudes):
         # Guardamos las distancias de todas las ciudades vs la ciudad "i"
         Distancias.append(DistTemp)
     return Distancias   
-
-#Citys=leerdatos("berlin52.txt")
-#Citys=leerdatos("PoblacionesSpa.txt")
-#Distancias=CalcularDistancias(Citys["Lat"],Citys["Long"])
