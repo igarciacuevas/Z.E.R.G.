@@ -8,7 +8,7 @@ Funcion para incializar el log file, escribiendo las condiciones del experimento
 """
 
 
-def iniciar(archivo,cross,mut,tamaño,iteraciones):
+def iniciar(archivo,cross,mut,tamaño,iteraciones,numciudades):
     archivo.write("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     archivo.write("\n")
     archivo.write("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -20,6 +20,8 @@ def iniciar(archivo,cross,mut,tamaño,iteraciones):
     archivo.write("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     archivo.write("\n")
     
+    archivo.write("El problema consta de " + str(numciudades) + " ciudades.")
+    archivo.write("\n")
     archivo.write("El enjambre tiene " + str(tamaño) + " particulas.")
     archivo.write("\n")
     archivo.write("La busqueda tendrá como máximo " + str(iteraciones) + " iteraciones.")
