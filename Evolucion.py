@@ -10,8 +10,9 @@ Funciones de alto nivel para cruzar y mutar las rutas y finalmente generar nueva
 
 import Crossovers
 import Mutations
+import random
     
-def gennuevaruta(enjambre,particula,operador_cross,operador_mut):
+def gen_nueva_ruta(enjambre,particula,operador_cross,operador_mut):
     # Sacamos los indices de los vecinos
     indicesvecinos = particula.vecinos
     # Seleccionamos el mejor de los vecinos, el cual sera utilizado para el crossover
@@ -23,12 +24,12 @@ def gennuevaruta(enjambre,particula,operador_cross,operador_mut):
         
     # Una vez seleccionado el mejor vecino, realizamos el crossover y mutacion
     # para obtener nueva ruta
-    nuevaruta = cruzarymutar(particula.ruta,mejorvecino.ruta,operador_cross,operador_mut)
+    nuevaruta = cruzar_y_mutar(particula.ruta,mejorvecino.ruta,operador_cross,operador_mut)
     
     return nuevaruta
 
 
-def cruzarymutar(rutaparticula,rutavecino,opcross,opmut):
+def cruzar_y_mutar(rutaparticula,rutavecino,opcross,opmut):
     # Por defecto se realizará un crossover Order1 y no mutacion
     if opcross == 1: # Order1
         nuevaruta = Crossovers.Order1(rutaparticula,rutavecino)
@@ -39,10 +40,13 @@ def cruzarymutar(rutaparticula,rutavecino,opcross,opmut):
     else: # Si no es numero de operador valido, se realizar un Order1
         nuevaruta = Crossovers.Order1(rutaparticula,rutavecino)
         
+        
     # Mutaciones. Por defecto no se realizará la operacion de mutacion
-    if opmut == 1: # Inversion
-        nuevaruta = Mutations.Inversion(nuevaruta)
-    elif opmut == 2: # SingleSwap
-        nuevaruta = Mutations.RandomSwap(nuevaruta)
+    # Hay un 10% de probabilidades de realizar una mutacion
+    if random.randint(0,100) < 15:
+        if opmut == 1: # Inversion
+            nuevaruta = Mutations.Inversion(nuevaruta)
+        elif opmut == 2: # SingleSwap
+            nuevaruta = Mutations.RandomSwap(nuevaruta)
     
     return nuevaruta
