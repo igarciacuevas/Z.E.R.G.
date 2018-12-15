@@ -13,17 +13,17 @@ class GenParticula:
         self.ruta = ruta # Orden de ciudades de la ruta
         self.vecinos = vecinos # Indices de los vecinos con los que realizar crossover
         self.distanciaruta = 0.0 # Distancia de la ruta creada
-        self.calculardistanciaruta(distancias) # Calculo de la distancia de la ruta creada
+        self.calcular_distancia_ruta(distancias) # Calculo de la distancia de la ruta creada
         
     # Calcular la distancia de la ruta creada
-    def calculardistanciaruta(self,distancias):
+    def calcular_distancia_ruta(self,distancias):
         # Iteramos a lo largo de la ruta
         for idx in range(len(self.ruta) - 1):
             iorigen = self.ruta[idx] # Indice ciudad origen
             idestino = self.ruta[idx + 1] # Indice ciudad destino
             # Acumulacion de distancias
             self.distanciaruta += distancias[iorigen][idestino] 
-        # Añadimos la ultima distancia desde el punto final al punto inicial de la ruta
+        # Anadimos la ultima distancia desde el punto final al punto inicial de la ruta
         self.distanciaruta += distancias[self.ruta[len(self.ruta) - 1]][self.ruta[0]]
         return self.distanciaruta
     
