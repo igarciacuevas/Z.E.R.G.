@@ -18,9 +18,10 @@ import datetime
 import funcionesLog
 import os
 import time
+import Graficar
 
 
-def ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut):
+def ZERG(figura,archivodatos,tamano,itermax,numvecinos,operador_cross,operador_mut):
     
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #             DATOS INICIALES
@@ -29,7 +30,7 @@ def ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut):
     # Variables vacias iniciales
     enjambre = [] # Lista de todas las particulas
     distanciasrutas = [] # Lista de las distancias para cada particula
-    indices = list(range(tamaño)) # Indices del 0 al tamaño del enjambre 
+    indices = list(range(tamano)) # Indices del 0 al tamano del enjambre 
     
     # Logfile para la ejecucion
     nombrelogfile = os.path.splitext(archivodatos)[0]+datetime.datetime.now().strftime('_%H_%M_%S_%d_%m_%Y.log')
@@ -38,32 +39,63 @@ def ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut):
     #             DATOS DEL PROBLEMA
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
+    if operador_cross==1:
+        if operador_mut==0:
+            configuracion="/Config1/"
+        elif operador_mut==1:
+            configuracion="/Config2/"
+        elif operador_mut==2:
+            configuracion="/Config3/"
+    elif operador_cross==2:
+        if operador_mut==0:
+            configuracion="/Config4/"
+        elif operador_mut==1:
+            configuracion="/Config5/"
+        elif operador_mut==2:
+            configuracion="/Config6/"
+    elif operador_cross==2:
+        if operador_mut==0:
+            configuracion="/Config7/"
+        elif operador_mut==1:
+            configuracion="/Config8/"
+        elif operador_mut==2:
+            configuracion="/Config9/"
+    else:
+        if operador_mut==0:
+            configuracion="/Config1/"
+        elif operador_mut==1:
+            configuracion="/Config2/"
+        elif operador_mut==2:
+            configuracion="/Config3/"
+            
     #Lectura de datos
     # Citys
     #   "Lat" - Latitud de cada ciudad
     #   "Long" - Longitud de cada ciudad
     #   "Nombres" - Nombres de cada punto. Pueden ser nombres propios o numeros simplemente
-    Citys = FuncionesInicializar.leerdatos(archivodatos)
-    #Calculo de distancias
-    Distancias = FuncionesInicializar.calculardistancias(Citys["Lat"],Citys["Long"])
     
-    with open("./logs/"+nombrelogfile, "a") as logbook:
+    Citys = FuncionesInicializar.leer_datos(archivodatos)
+    
+    #Calculo de distancias
+    Distancias = FuncionesInicializar.calcular_distancias(Citys["Lat"],Citys["Long"])
+    
+    with open("./logs/"+os.path.splitext(archivodatos)[0]+configuracion+nombrelogfile, "a") as logbook:
         
-        funcionesLog.iniciar(logbook,operador_cross,operador_mut,tamaño,itermax,len(Citys["Lat"]))
+        funcionesLog.iniciar(logbook,operador_cross,operador_mut,tamano,itermax,len(Citys["Lat"]))
         
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         #             CREACION DEL ENJAMBRE
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
         # Vamos a generar todas las particulas iniciales
-        for i in range(tamaño):
+        for i in range(tamano):
           # Vecinos para cada particula con los que realizará crossovers
           indicesvecinos = random.sample(indices, numvecinos) 
           # Generamos particulas iniciales
           particula = GenParticula.crear_particula(indicesvecinos,Distancias) 
           # Guardamos la distancia de la ruta de cada particula
           distanciasrutas.append(particula.distanciaruta) 
-          # Añadimos la particula al enjambre
+          # Anadimos la particula al enjambre
           enjambre.append(particula) 
         
         # Sacamos el indice del enjambre correspondiente a la particula 
@@ -73,6 +105,17 @@ def ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut):
         logbook.write("\n")
         logbook.write("\n")
         logbook.write("\n")
+        
+        # Graficamos la ruta inicial
+        # etiquetas = Graficar.crear_etiquetas(Citys["Nombres"])
+        #figura = Graficar.crear_figura()
+        #figura.clear()
+        grafo_0 = Graficar.crear_grafo(Citys["Lat"],Citys["Long"])
+        
+        # Anadimos la ruta
+        segmentos = Graficar.crear_lista_segmentos(enjambre[indicemejorparticula_ini].ruta)
+        grafo = Graficar.anadir_ruta(grafo_0,segmentos)
+        Graficar.dibujar(figura, grafo_0)
         
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         #             EVOLUCION DEL ENJAMBRE
@@ -88,11 +131,11 @@ def ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut):
             print("Iteracion " + str(i))
             # Iteramos a lo largo del enjambre
             for j in range(len(indices)):
-                print(j)
+#                print(j)
                 # Sacamos la particula
                 particulaoriginal = enjambre[j]
                 # Caculamos la nueva ruta resultado de curzar y mutar
-                nuevaruta = Evolucion.gennuevaruta(enjambre,particulaoriginal,operador_cross,operador_mut)
+                nuevaruta = Evolucion.gen_nueva_ruta(enjambre,particulaoriginal,operador_cross,operador_mut)
                 # Si la nueva particula es mejor que la original, la reemplazará
                 # En caso contrario la particula original se mantendrá
                 nuevaparticula = GenParticula.GenParticula(nuevaruta, Distancias, particulaoriginal.vecinos)
@@ -106,15 +149,18 @@ def ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut):
             logbook.write(str(i) + "--" + str(enjambre[idxbest].distanciaruta))
             logbook.write("\n")
             
-            # Si recibimos misma ruta optima durante más de el 30% de iteraciones - BREAK
+            # Si recibimos misma ruta optima durante más de el 15% de iteraciones - BREAK
             if idxbest == idxbestold:
                 contadorestancamiento+=1
-                if contadorestancamiento >= round((0.2*itermax)):
+                if contadorestancamiento >= round((0.15*itermax)):
                     print("Busqueda estancada.")
                     logbook.write("FINAL DE BUSQUEDA POR ESTANCAMIENTO")
                     logbook.write("\n")
                     break
             else:
+                segmentos = Graficar.crear_lista_segmentos(enjambre[idxbest].ruta)
+                grafo = Graficar.anadir_ruta(grafo_0,segmentos)
+                Graficar.dibujar(figura,grafo)
                 contadorestancamiento = 0
                 idxbestold = idxbest
                 
@@ -156,41 +202,46 @@ def ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut):
         logbook.write("\n")
         logbook.write("------FINAL DEL EXPERIMENTO------")
         logbook.close()
+        
+        Graficar.guardar_figura(figura,configuracion,os.path.splitext(archivodatos)[0],os.path.splitext(nombrelogfile)[0])
             
         return
 
 
 # Variables auxiliares
 # Input de datos
-archivos = ["autonomicas", "mundiales","berlin52.txt","ch130.txt","ch150.txt","PoblacionesSpa.txt"]
-#archivodatos = "berlin52.txt" 
+#archivos = ["autonomicas", "mundiales","berlin52.txt","ch130.txt","ch150.txt","PoblacionesSpa.txt"]
+#archivodatos = archivos[0]
+#
+## Tamnos de enjambres
+#tamanos = [40,100,250,500]
+##tamano = 200
+#
+## Numero maximo de iteraciones
+#iteraciones = [500,2000,5000]
+##itermax = 1000
+#
+## Numero de vecinos entre particulas
+#numerodevecinos = [3,5,10,15] # Numero de vecinos para cada particula
+##numvecinos = 3
+#
+## Operadores de crossover
+## 1=Order1 // 2=Cycle // 3=PMX
+#operadores_c = [1,2,3]
+##operador_cross = 1
+#
+## Operadores de mutacion
+#operadores_m = [0,1,2]
+##operador_mut = 1 # 0=No mutacion // 1=Inversion // 2=RandomSwap
+#
+##ZERG(archivodatos,tamano,itermax,numvecinos,operador_cross,operador_mut)
+#
+#for archivodatos in archivos:
+#    for tamano in tamanos:
+#        for itermax in iteraciones:
+#            for numvecinos in numerodevecinos:
+#                for operador_cross in operadores_c:
+#                    for operador_mut in operadores_m:
+#                        ZERG(archivodatos,tamano,itermax,numvecinos,operador_cross,operador_mut)
 
-# Tamños de enjambres
-tamaños = [20,40,70,100,250,500]
-#tamaño = 100
-
-# Numero maximo de iteraciones
-iteraciones = [50,100,250,500,1000,2000]
-#itermax = 600
-
-# Numero de vecinos entre particulas
-numerodevecinos = [2,3,4,5,7,10] # Numero de vecinos para cada particula
-#numvecinos = 4
-
-# Operadores de crossover
-# 1=Order1 // 2=Cycle // 3=PMX
-operadores_c = [1,2,3]
-#operador_cross = 1 
-
-# Operadores de mutacion
-operadores_m = [0,1,2]
-#operador_mut = 1 # 0=No mutacion // 1=Inversion // 2=RandomSwap
-
-for archivodatos in archivos:
-    for tamaño in tamaños:
-        for itermax in iteraciones:
-            for numvecinos in numerodevecinos:
-                for operador_cross in operadores_c:
-                    for operador_mut in operadores_m:
-                        ZERG(archivodatos,tamaño,itermax,numvecinos,operador_cross,operador_mut)
-
+#ZERG(archivodatos,tamano,itermax,numvecinos,operador_cross,operador_mut)
