@@ -25,34 +25,34 @@ def Inversion_test(ruta,pos1,pos2):
 """
 Intercambiamos dos posiciones de sitio
 """
-def RandomSwap_test(ruta, poslimit, pos1I, pos1D, tamaño):
+def RandomSwap_test(ruta, poslimit, pos1I, pos1D, tamano):
     
     # Limite en el borde - devolver ruta original
     if poslimit == 0 or poslimit==(len(ruta)-1):
         return ruta
         
     # Limites
-    if (pos1I+tamaño) > poslimit:
-        pos1I = poslimit - tamaño
+    if (pos1I+tamano) > poslimit:
+        pos1I = poslimit - tamano
         print(pos1I)
     
     # Limites
-    if (pos1D+tamaño) > (len(ruta)-1):
-        pos1D = (len(ruta)-1) - tamaño
+    if (pos1D+tamano) > (len(ruta)-1):
+        pos1D = (len(ruta)-1) - tamano
         print(pos1D)
         
     # Intercambio
-    for i in range(tamaño):
+    for i in range(tamano):
         print(ruta)
         ruta[pos1I+i] , ruta[pos1D+i] = ruta[pos1D+i] , ruta[pos1I+i]
             
     return ruta
 
-#ruta = [1,2,3,4,5,6,7,8]
-#ruta2 = Inversion_test(ruta,4,7)
-#print("La respuesta deberia ser:")
-#print("[1, 2, 3, 4, 8, 7, 6, 5]")
-#print(ruta2)
+ruta = [1,2,3,4,5,6,7,8]
+ruta2 = Inversion_test(ruta,4,7)
+print("La respuesta deberia ser:")
+print("[1, 2, 3, 4, 8, 7, 6, 5]")
+print(ruta2)
     
 #ruta = [1,2,3,4,5,6,7,8]
 #ruta2 = RandomSwap_test(ruta,0,0,7,8)
