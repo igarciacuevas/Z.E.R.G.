@@ -7,44 +7,44 @@ Este es un archivo temporal.
 
 import math
 
-def leerdatos(nombre):
+def leer_datos(nombre):
     # Lista de ciudades
     Ciudades = {}
     
     # Capitales autonomicas
     if (nombre == "autonomicas"):
         archivo = open("./data/CapitalesAutonomicas.txt", "r")
-        Ciudades = LeerLineas(archivo,"tabulador")
+        Ciudades = leer_lineas(archivo,"tabulador")
     # capitales del mundo
-    elif (nombre == "mundo"):
+    elif (nombre == "mundiales"):
         archivo = open("./data/CapitalesMundiales.txt", "r")
-        Ciudades = LeerLineas(archivo,"tabulador")
+        Ciudades = leer_lineas(archivo,"tabulador")
     # capitales europeas
 #    elif (nombre == "europa"):
 #        archivo = open("./data/CapitalesEuropa.txt", "r")
-#        Ciudades = LeerLineas(archivo,"tabulador")
+#        Ciudades = leer_lineas(archivo,"tabulador")
     # capitales asia
 #    elif (nombre == "asia"):
 #        archivo = open("./data/CapitalesAsia.txt", "r")
-#        Ciudades = LeerLineas(archivo,"tabulador")
+#        Ciudades = leer_lineas(archivo,"tabulador")
     # capitales america
 #    elif (nombre == "america"):
 #        archivo = open("./data/CapitalesAmerica.txt", "r")
-#        Ciudades = LeerLineas(archivo,"tabulador")
+#        Ciudades = leer_lineas(archivo,"tabulador")
     # capitales oceania
 #    elif (nombre == "oceania"):
 #        archivo = open("./data/CapitalesOceania.txt", "r")
-#        Ciudades = LeerLineas(archivo,"tabulador")
+#        Ciudades = leer_lineas(archivo,"tabulador")
     # Benchmark problem data: archivos de texto separado por espacios
     else:
         archivo = open("./data/"+nombre, "r")
-        Ciudades = LeerLineas(archivo,"espacio")
+        Ciudades = leer_lineas(archivo,"espacio")
         
     # Cerrar archivo y devolver diccionario
     archivo.close()
     return Ciudades
      
-def LeerLineas(archivo,separador):
+def leer_lineas(archivo,separador):
     # Inicializar listas
     Nombres = [] 
     Latitud = []
@@ -69,7 +69,7 @@ def LeerLineas(archivo,separador):
     return Ciudades
 
 
-def calculardistancias(Latitudes,Longitudes):
+def calcular_distancias(Latitudes,Longitudes):
     # Inicializar Listas y puntos auxiliares
     Distancias = []
     Punto1 = []
