@@ -46,7 +46,7 @@ def RandomSwap(ruta):
     if poslimit == 0 or poslimit==(len(ruta)-1):
         return ruta
     
-    # Tamaño maximo de rango
+    # Tamano maximo de rango
     if poslimit > (len(ruta)-1-poslimit):
         maxrango = (len(ruta)-1-poslimit)
     else:
@@ -54,21 +54,21 @@ def RandomSwap(ruta):
     
     # Posiciones izquieda
     pos1I = random.randint(0,poslimit)
-    tamaño = random.randint(0,maxrango)
+    tamano = random.randint(0,maxrango)
     
     # Limites
-    if (pos1I+tamaño) > poslimit:
-        pos1I = poslimit-tamaño
+    if (pos1I+tamano) > poslimit:
+        pos1I = poslimit-tamano
         
     # Posiciones derecha
     pos1D = random.randint(poslimit+1,len(ruta)-1)
     
     # Limites
-    if (pos1D+tamaño) > (len(ruta)-1):
-        pos1D = (len(ruta)-1)-tamaño
+    if (pos1D+tamano) > (len(ruta)-1):
+        pos1D = (len(ruta)-1)-tamano
         
     # Intercambio
-    for i in range(tamaño):
+    for i in range(tamano):
         ruta[pos1I+i] , ruta[pos1D+i] = ruta[pos1D+i] , ruta[pos1I+i]
     
     return ruta
