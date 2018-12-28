@@ -23,6 +23,8 @@ def ApuntarResultadosEnExcel(logfiles,problema):
 	contador+=1
 	SheetResultados.cell(column=contador,row=1,value='Mutacion')
 	contador+=1
+	SheetResultados.cell(column=contador,row=1,value='Config')
+	contador+=1
 	SheetResultados.cell(column=contador,row=1,value='NumIter')
 	contador+=1
 	SheetResultados.cell(column=contador,row=1,value='Estancamiento')
@@ -32,6 +34,8 @@ def ApuntarResultadosEnExcel(logfiles,problema):
 	SheetResultados.cell(column=contador,row=1,value='Tiempo')
 	contador+=1
 	SheetResultados.cell(column=contador,row=1,value='Distancia')
+	contador+=1
+	SheetResultados.cell(column=contador,row=1,value='NumVecinos')
 	contador+=1
 	
     # fila del excel
@@ -63,12 +67,43 @@ def ApuntarResultadosEnExcel(logfiles,problema):
 					MaxIter = int(linea.split()[5])
 					listacampos.append(MaxIter)
 				elif contadorlinea==9: # Crossover
-					listacampos.append(linea.split()[-1])
+					cross = linea.split()[-1][:-1]
+					if cross == "Oder1":
+						listacampos.append("Order1")
+					else:
+						listacampos.append(cross) #Sin el punto final
 				elif contadorlinea==10: # Mutacion
 					if (linea.split()[0]=="No"):
 						listacampos.append("No")
 					else:
-						listacampos.append(linea.split()[-1])
+						mutacion = linea.split()[-1][:-1] #Sin el punto final
+						if mutacion=="SingleSwap": #Fix log files
+							listacampos.append("RandomSwap")
+						else:
+							listacampos.append(mutacion) 
+				# Correcta clasificacion de config
+					if listacampos[-2]=="Cycle":
+						if listacampos[-1]=="No":
+							listacampos.append("Config4")
+						elif listacampos[-1]=="RandomSwap":
+							listacampos.append("Config6")
+						else:
+							listacampos.append("Config5")                        
+					elif listacampos[-2]=="PMX": 
+						if listacampos[-1]=="No":
+							listacampos.append("Config7")
+						elif listacampos[-1]=="RandomSwap":
+							listacampos.append("Config9")
+						else:
+							listacampos.append("Config8") 
+					else:
+						if listacampos[-1]=="No":
+							listacampos.append("Config1")
+						elif listacampos[-1]=="RandomSwap":
+							listacampos.append("Config3")
+						else:
+							listacampos.append("Config2") 
+                            
 			# Resto
 			elif contadorlinea>=22 and not(final):
 #				if contadorlinea==1022:
@@ -100,6 +135,8 @@ def ApuntarResultadosEnExcel(logfiles,problema):
 					listacampos.append(float(linea.split()[7]))
 				elif contadorfinal==7: # Distancia
 					listacampos.append(float(linea.split()[1]))
+				elif contadorfinal==9: # Vecinos
+					listacampos.append(float(linea.split()[1]))
 				elif linea[0:5]==r'FINAL': # estancamiento == IterMax
 					contadorfinal=0
 			contadorlinea+=1
@@ -115,39 +152,38 @@ def ApuntarResultadosEnExcel(logfiles,problema):
 	return
 
 def ListarArchivos(directorio):
-    lista=[]
+	lista=[]
     
-    if not os.path.isdir(directorio):
+	if not os.path.isdir(directorio):
         # Warning y Exit
-        sys.exit('El directorio introducido no existe!')
+		sys.exit('El directorio introducido no existe!')
     
-    #OBTENEMOS TODOS LOS DIRECTORIOS Y ARCHIVOS QUE ESTAN EN EL DIRECTORIO INTRODUCIDO
-    for dirname, dirnames, filenames in os.walk(directorio):
+	#OBTENEMOS TODOS LOS DIRECTORIOS Y ARCHIVOS QUE ESTAN EN EL DIRECTORIO INTRODUCIDO
+	for dirname, dirnames, filenames in os.walk(directorio):
         # print path to all subdirectories first.
-        for subdirname in dirnames:
-            lista.append(os.path.join(dirname, subdirname))
+		for subdirname in dirnames:
+			lista.append(os.path.join(dirname, subdirname))
     
         # print path to all filenames.
-        for filename in filenames:
-            lista.append(os.path.join(dirname, filename))
+		for filename in filenames:
+			lista.append(os.path.join(dirname, filename))
     
-    longitudlista=len(lista)
-    c=0
+	longitudlista=len(lista)
+	c=0
     
-    # FILTRAMOS LOS PATHS OBTENIDOS QUITANDO ACM, MEMORIAS Y DIRECTORIOS. 
-    # PUEDE QUE HAYA QUE VARIAR EL ORDEN DE FILTRADO
-    while c < longitudlista:
-        extension = os.path.splitext(lista[c])[1]
-        if not extension=='.log':
-            del lista[c]
-            longitudlista=longitudlista-1
-            c=c-1
+    # FILTRAMOS LOS PATHS OBTENIDOS 
+	while c < longitudlista:
+		extension = os.path.splitext(lista[c])[1]
+		if not extension=='.log':
+			del lista[c]
+			longitudlista=longitudlista-1
+			c=c-1
             
-        c=c+1
+		c=c+1
         
-    return lista  
+	return lista  
 
-ruta = r'C:\Users\igarc\ZERG\logs\ch150 - fail'
+ruta = r'C:\Users\igarc\ZERG\logs\autonomicas_vecinos'
 
 cachos = ruta.split('\\')
 

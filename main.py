@@ -53,7 +53,7 @@ def ZERG(figura,archivodatos,tamano,itermax,numvecinos,operador_cross,operador_m
             configuracion="/Config5/"
         elif operador_mut==2:
             configuracion="/Config6/"
-    elif operador_cross==2:
+    elif operador_cross==3:
         if operador_mut==0:
             configuracion="/Config7/"
         elif operador_mut==1:
@@ -183,6 +183,9 @@ def ZERG(figura,archivodatos,tamano,itermax,numvecinos,operador_cross,operador_m
         logbook.write("Distancia:  " + str(resultado.distanciaruta))
         logbook.write("\n")
         logbook.write("\n")
+        logbook.write("NumVecinos:  " + str(numvecinos))
+        logbook.write("\n")
+        logbook.write("\n")
         logbook.write("Indices de ruta:  " + str(resultado.ruta))
         logbook.write("\n")
         logbook.write("\n")
@@ -211,28 +214,28 @@ def ZERG(figura,archivodatos,tamano,itermax,numvecinos,operador_cross,operador_m
 # Variables auxiliares
 # Input de datos
 #archivos = ["autonomicas", "mundiales","berlin52.txt","ch130.txt","ch150.txt","PoblacionesSpa.txt"]
-#archivodatos = archivos[0]
+#archivodatos = "mundiales"
 #
 ## Tamnos de enjambres
 #tamanos = [40,100,250,500]
-##tamano = 200
+#tamano = 200
 #
 ## Numero maximo de iteraciones
 #iteraciones = [500,2000,5000]
-##itermax = 1000
+#itermax = 1000
 #
 ## Numero de vecinos entre particulas
 #numerodevecinos = [3,5,10,15] # Numero de vecinos para cada particula
-##numvecinos = 3
+#numvecinos = 3
 #
 ## Operadores de crossover
 ## 1=Order1 // 2=Cycle // 3=PMX
 #operadores_c = [1,2,3]
-##operador_cross = 1
+#operador_cross = 1
 #
 ## Operadores de mutacion
 #operadores_m = [0,1,2]
-##operador_mut = 1 # 0=No mutacion // 1=Inversion // 2=RandomSwap
+#operador_mut = 0 # 0=No mutacion // 1=Inversion // 2=RandomSwap
 #
 ##ZERG(archivodatos,tamano,itermax,numvecinos,operador_cross,operador_mut)
 #
@@ -244,4 +247,5 @@ def ZERG(figura,archivodatos,tamano,itermax,numvecinos,operador_cross,operador_m
 #                    for operador_mut in operadores_m:
 #                        ZERG(archivodatos,tamano,itermax,numvecinos,operador_cross,operador_mut)
 
+#ZERG(archivodatos,tamano,itermax,numvecinos,operador_cross,operador_mut)
 #ZERG(archivodatos,tamano,itermax,numvecinos,operador_cross,operador_mut)

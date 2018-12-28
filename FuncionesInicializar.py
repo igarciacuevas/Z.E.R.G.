@@ -7,6 +7,25 @@ Este es un archivo temporal.
 
 import math
 
+def cambiar_latitud(dato):
+    if dato[-1]=='N':
+        return float(1.0*float(dato[:-1]))
+    else:
+        return float(-1.0*float(dato[:-1]))
+    
+def cambiar_longitud(dato):
+    if "\n" in dato:
+        if dato[-3]=='E':
+            return float(1.0*float(dato[:-2]))
+        else:
+            return float(-1.0*float(dato[:-2]))
+    else: #Ultima linea
+        if dato[-1]=='E':
+            return float(1.0*float(dato[:-1]))
+        else:
+            return float(-1.0*float(dato[:-1]))
+
+
 def leer_datos(nombre):
     # Lista de ciudades
     Ciudades = {}
@@ -49,13 +68,18 @@ def leer_lineas(archivo,separador):
     Nombres = [] 
     Latitud = []
     Longitud = []
+    
     # Archivos propios
     if separador == "tabulador":
         for linea in archivo:
             datoslinea = linea.split("\t")
             Nombres.append(str(datoslinea[0]))
-            Latitud.append(float(datoslinea[1]))
-            Longitud.append(float(datoslinea[2]))
+            if "Mundiales" in archivo.name: # N S W E
+                Latitud.append(cambiar_latitud(datoslinea[1]))
+                Longitud.append(cambiar_longitud(datoslinea[2]))
+            else:
+                Latitud.append(float(datoslinea[1]))
+                Longitud.append(float(datoslinea[2]))
     # Benchmark problems - Archivos de texto con espacios
     else:
         for linea in archivo:

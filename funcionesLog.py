@@ -34,14 +34,14 @@ def iniciar(archivo,cross,mut,tamano,iteraciones,numciudades):
         archivo.write("El operador de crossover es PMX.")
         archivo.write("\n")
     else: #Order1
-        archivo.write("El operador de crossover es Oder1.")
+        archivo.write("El operador de crossover es Order1.")
         archivo.write("\n")
     
     if mut == 1: #Inversion
         archivo.write("El operador de mutacion es Inversion.")
         archivo.write("\n")
     elif cross == 2: #Swap
-        archivo.write("El operador de crossover es SingleSwap.")
+        archivo.write("El operador de crossover es RandomSwap.")
         archivo.write("\n")
     else: #Nothing
         archivo.write("No hay operador de mutacion.")
