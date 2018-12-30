@@ -42,6 +42,7 @@ def ApuntarResultadosEnExcel(logfiles,problema):
 	rowcounter=2
     
 	for archivo in logfiles:
+		print(archivo)
 		contadorlinea = 1 # fila del archivo
 		BestDist = 20000000.0
 		contadorfinal = 0
@@ -136,12 +137,83 @@ def ApuntarResultadosEnExcel(logfiles,problema):
 				elif contadorfinal==7: # Distancia
 					listacampos.append(float(linea.split()[1]))
 				elif contadorfinal==9: # Vecinos
-					listacampos.append(float(linea.split()[1]))
+					if "ConVecinos" in listacampos[0]: #Only for ConVecinos
+						listacampos.append(float(linea.split()[1]))
 				elif linea[0:5]==r'FINAL': # estancamiento == IterMax
 					contadorfinal=0
 			contadorlinea+=1
 
 		f.close()
+		
+		# Reclasificacion
+		if "SinVecinos" in listacampos[0]:
+			if listacampos[5]=="PMX":
+				if "Config1" in listacampos[0]:
+					listacampos[6]="No"
+					listacampos[7]="Config7"
+				elif "Config2" in listacampos[0]:
+					listacampos[6]="Inversion"
+					listacampos[7]="Config8"
+				else:
+					listacampos[6]="RandomSwap"
+					listacampos[7]="Config9"
+			elif listacampos[5]=="Order1":
+				if "Config1" in listacampos[0]:
+					listacampos[6]="No"
+					listacampos[7]="Config1"
+				elif "Config2" in listacampos[0]:
+					listacampos[6]="Inversion"
+					listacampos[7]="Config2"
+				else:
+					listacampos[6]="RandomSwap"
+					listacampos[7]="Config3"
+			else: #Cycle
+				if "Config4" in listacampos[0]:
+					listacampos[6]="No"
+					listacampos[7]="Config4"
+				elif "Config5" in listacampos[0]:
+					listacampos[6]="Inversion"
+					listacampos[7]="Config5"
+				else:
+					listacampos[6]="RandomSwap"
+					listacampos[7]="Config6"
+		else:
+			if "Config1" in listacampos[0]:
+				listacampos[5]="Order1"
+				listacampos[6]="No"
+				listacampos[7]="Config1"
+			elif "Config2" in listacampos[0]:
+				listacampos[5]="Order1"
+				listacampos[6]="Inversion"
+				listacampos[7]="Config2"
+			elif "Config3" in listacampos[0]:
+				listacampos[5]="Order1"
+				listacampos[6]="RandomSwap"
+				listacampos[7]="Config3"
+			elif "Config4" in listacampos[0]:
+				listacampos[5]="Cycle"
+				listacampos[6]="No"
+				listacampos[7]="Config4"
+			elif "Config5" in listacampos[0]:
+				listacampos[5]="Cycle"
+				listacampos[6]="Inversion"
+				listacampos[7]="Config5"
+			elif "Config6" in listacampos[0]:
+				listacampos[5]="Cycle"
+				listacampos[6]="RandomSwap"
+				listacampos[7]="Config6"
+			elif "Config7" in listacampos[0]:
+				listacampos[5]="PMX"
+				listacampos[6]="No"
+				listacampos[7]="Config7"
+			elif "Config8" in listacampos[0]:
+				listacampos[5]="PMX"
+				listacampos[6]="Inversion"
+				listacampos[7]="Config8"
+			elif "Config9" in listacampos[0]:
+				listacampos[5]="PMX"
+				listacampos[6]="RandomSwap"
+				listacampos[7]="Config9"
 		# Escribir al excel
 		for i in range(len(listacampos)):
 			# Write
@@ -183,12 +255,14 @@ def ListarArchivos(directorio):
         
 	return lista  
 
-ruta = r'C:\Users\igarc\ZERG\logs\autonomicas_vecinos'
+#rutas = [r'C:\Users\igarc\ZERG\logs\SinVecinos\mundiales']
+    
+rutas = [r'C:\Users\igarc\ZERG\logs']
 
-cachos = ruta.split('\\')
-
-archivos=ListarArchivos(ruta)
-ApuntarResultadosEnExcel(archivos,cachos[-1])
+for ruta in rutas:
+	cachos = ruta.split('\\')
+	archivos=ListarArchivos(ruta)
+	ApuntarResultadosEnExcel(archivos,cachos[-1])
 
 
 

@@ -38,6 +38,12 @@ def leer_datos(nombre):
     elif (nombre == "mundiales"):
         archivo = open("./data/CapitalesMundiales.txt", "r")
         Ciudades = leer_lineas(archivo,"tabulador")
+    elif (nombre == "autonomicas_vecinos.txt"):
+        archivo = open("./data/autonomicas_vecinos.txt", "r")
+        Ciudades = leer_lineas(archivo,"tabulador")
+    elif (nombre == "mundiales_vecinos.txt"):
+        archivo = open("./data/mundiales_vecinos.txt", "r")
+        Ciudades = leer_lineas(archivo,"tabulador")
     # capitales europeas
 #    elif (nombre == "europa"):
 #        archivo = open("./data/CapitalesEuropa.txt", "r")
@@ -74,7 +80,7 @@ def leer_lineas(archivo,separador):
         for linea in archivo:
             datoslinea = linea.split("\t")
             Nombres.append(str(datoslinea[0]))
-            if "Mundiales" in archivo.name: # N S W E
+            if "Mundiales" in archivo.name or "mundiales" in archivo.name: # N S W E
                 Latitud.append(cambiar_latitud(datoslinea[1]))
                 Longitud.append(cambiar_longitud(datoslinea[2]))
             else:
