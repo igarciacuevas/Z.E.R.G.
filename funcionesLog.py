@@ -40,7 +40,7 @@ def iniciar(archivo,cross,mut,tamano,iteraciones,numciudades):
     if mut == 1: #Inversion
         archivo.write("El operador de mutacion es Inversion.")
         archivo.write("\n")
-    elif cross == 2: #Swap
+    elif mut == 2: #Swap
         archivo.write("El operador de crossover es RandomSwap.")
         archivo.write("\n")
     else: #Nothing
